@@ -4,13 +4,13 @@ InputDecoration textfield(String hint)
 {
   return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: Colors.black45),border: InputBorder.none
+      hintStyle: TextStyle(color: Colors.white60),border: InputBorder.none
       );
 
 }
 
 TextStyle simpleTextFieldStyle(){
-  return TextStyle(color: Colors.black,fontSize:16,decoration: TextDecoration.underline );
+  return TextStyle(color: Colors.white,fontSize:16,decoration: TextDecoration.underline );
 }
 
 TextStyle mediumTextStyle(){

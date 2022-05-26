@@ -76,7 +76,7 @@ class _loginState extends State<Login> {
     double scwidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
       body: Container(
         child: Column(
           children: [
@@ -102,7 +102,7 @@ class _loginState extends State<Login> {
                           child: Text(
                             "Login",
                             style: TextStyle(
-                                color: Colors.deepPurpleAccent,
+                                color: Colors.white,
                                 fontSize: scwidth * 0.2),
                           ),
                         ),
@@ -145,40 +145,40 @@ class _loginState extends State<Login> {
                         obscureText: true,
                         decoration: textfield("Password")))),
             SizedBox(
-              height: scheight * 0.01,
+              height: scheight * 0.06,
             ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  "Forget Password?",
-                  style: simpleTextFieldStyle(),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: scheight * 0.01,
-            ),
+            // Container(
+            //   alignment: Alignment.centerRight,
+            //   child: Container(
+            //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //     child: Text(
+            //       "Forget Password?",
+            //       style: simpleTextFieldStyle(),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: scheight * 0.01,
+            // ),
             GestureDetector(onTap: (){
               signIn();
             },
               child: Container(width: scwidth * 0.4,
                 decoration: BoxDecoration(color: Colors.deepPurple,
-                    borderRadius: BorderRadius.circular(22)),
+                    borderRadius: BorderRadius.circular(15)),
                   child: Padding(
                     padding:  EdgeInsets.all(scwidth*0.02),
                     child: Center(child: Text('Login',style: TextStyle(color: Colors.white,fontSize:22 ),)),
                   ),
                 ),
             ),
-            SizedBox(height: scheight*0.01,),
+            SizedBox(height: scheight*0.02,),
             GestureDetector(onTap: (){
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Signup()));
             },
               child: Container(width: scwidth * 0.6,
                 decoration: BoxDecoration(color: Colors.deepPurple,
-                    borderRadius: BorderRadius.circular(22)),
+                    borderRadius: BorderRadius.circular(15)),
                 child: Padding(
                   padding:  EdgeInsets.all(scwidth*0.02),
                   child: Center(child: Text('Create Account',style: TextStyle(color: Colors.white,fontSize:22 ),)),

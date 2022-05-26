@@ -1,4 +1,6 @@
+import 'package:mychat/Modal/ImageItem.dart';
 import 'package:mychat/helper/constants.dart';
+import 'package:mychat/pages/UploadPhoto.dart';
 import 'package:mychat/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,17 +62,18 @@ settyping(){
     );
   }
 
-  sendMsg() {
-    if (_MsgResult.text.isNotEmpty) {
+  sendMsg(String msg) {
+    if (msg.isNotEmpty) {
       Map<String, dynamic> msgMap = {
-        "message": _MsgResult.text,
+        "message": msg,
         "sendby": Constants.myname,
         "sendto":widget.username,
         "time": DateTime.now().millisecondsSinceEpoch.toString(),
         "date": DateTime.now().hour.toString() +":"+ DateTime.now().minute.toString()
       };
       dataBaseMethods.addConversationMsgs(widget.ChatRoomID, msgMap);
-      _MsgResult.text = "";
+      if(msg!="❤❤❤❤❤❤❤"&&msg!="❤")
+           _MsgResult.text = "";
     }
   }
 
@@ -125,7 +128,10 @@ settyping(){
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
+      appBar: AppBar(leading: GestureDetector(onTap:(){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UploadPhoto(isShowing: true,Username: widget.username,)));
+
+      } ,child: Padding(padding: EdgeInsets.only(left:20 ),child:ImageItem(widget.username,20) ,)),
         title: Text(widget.username),
         backgroundColor: Color(0x54ffffff),
         actions: [
@@ -158,51 +164,37 @@ settyping(){
                 color: Color(0x54ffffff),
                 height: MediaQuery.of(context).size.height / 12,
                 width: MediaQuery.of(context).size.width,
-                //padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Row(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 20,
                     ),
-                    Icon(
-                      Icons.apps,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 25,
-                    ),
-                    Icon(
-                      Icons.add_a_photo,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 25,
-                    ),
-                    Icon(
-                      Icons.photo,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 25,
-                    ),
-                    Icon(
-                      Icons.mic,
-                      color: Colors.blue,
-                    ),
+                    GestureDetector(onLongPress: (){
+                      sendMsg("❤❤❤❤❤❤❤");
+                    },
+                        onTap: () {
+                          sendMsg("❤");
+                        },
+                        child: Icon(
+                          Icons.favorite,
+                          color: Colors.blue,size: 30,
+                        )),
                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
+                          constraints: BoxConstraints(maxWidth:MediaQuery.of(context).size.width *0.74,
+                       maxHeight: MediaQuery.of(context).size.height*0.2),
                           padding: EdgeInsets.all(9),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 4),
-                            child: TextField(onTap: (){
+                            padding:  EdgeInsets.only(left: 4),
+                            child: TextField(maxLines: 4,keyboardType: TextInputType.multiline,
+                                onTap: (){
                               Map<String, dynamic> isTypingMap = {
                                 "istyping": 1,
                                 "sendby": Constants.myname,
                                 "time":
                                 DateTime.now().millisecondsSinceEpoch.toString()
                               };
-                              dataBaseMethods.createIsTypingState(
-                                  widget.ChatRoomID, isTypingMap);
+                              // dataBaseMethods.createIsTypingState(
+                              //     widget.ChatRoomID, isTypingMap);
                             },
                               controller: _MsgResult,
                               style: TextStyle(color: Colors.white),
@@ -216,7 +208,7 @@ settyping(){
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.vibrate();
-                        sendMsg();
+                        sendMsg(_MsgResult.text);
                         Map<String, dynamic> isTypingMap = {
                           "istyping": 0,
                           "sendby": Constants.myname,
@@ -244,25 +236,8 @@ settyping(){
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 29,
-                    ),
-                    Icon(
-                      Icons.insert_emoticon,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 35,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          _MsgResult.text = "❤";
-                          sendMsg();
-                        },
-                        child: Icon(
-                          Icons.favorite,
-                          color: Colors.blue,
-                        )),
+
+
                   ],
                 ),
               ),

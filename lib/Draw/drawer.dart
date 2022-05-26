@@ -7,7 +7,7 @@ class drawer extends CustomPainter {
     var paint = Paint();
 
     paint.style = PaintingStyle.fill;
-    paint.color=Colors.redAccent;
+    paint.color=Colors.deepPurple;
     var path = new Path();
 
     path.lineTo(size.width/4, 0);

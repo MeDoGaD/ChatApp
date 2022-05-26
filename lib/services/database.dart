@@ -1,6 +1,24 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:mychat/helper/constants.dart';
 
 class DataBaseMethods {
+
+ Future CheckUsername(String username)async{
+    bool valid=true;
+    await FirebaseFirestore.instance.collection("Users").get().then((value){
+      value.docs.forEach((element) {
+        if(element.id==username)
+          {
+            valid=false;
+          }
+      });
+    });
+    return valid;
+  }
    UsernameFound(String username)async{
      return await FirebaseFirestore.instance.collection("Users").where("name",isEqualTo:username).get();
   }
@@ -80,4 +98,9 @@ class DataBaseMethods {
         .where("Users", arrayContains: username)
         .snapshots();
   }
+   updateUserToken(String token, String username) async {
+      await FirebaseFirestore.instance
+         .collection("Users").doc(username).update({"fcmToken": token});
+   }
+
 }

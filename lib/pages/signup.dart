@@ -26,13 +26,15 @@ class _SignupState extends State<Signup> {
   TextEditingController _password = new TextEditingController();
   TextEditingController _email = new TextEditingController();
 FirebaseMessaging firebaseMessaging= FirebaseMessaging.instance;
-  signMeUp(){
+  signMeUp() async {
     if(formkey.currentState!.validate()) {
 
           setState(() {isloading=true;});
-
-       authMethods.signUpwithEmailAndPassword(_email.text, _password.text).then((value)async {
-         String? fcmtoken =await firebaseMessaging.getToken();
+          await dataBaseMethods.CheckUsername(_username.text).then((value) =>{
+            if(value==true)
+              {
+              authMethods.signUpwithEmailAndPassword(_email.text, _password.text).then((value)async {
+            String? fcmtoken =await firebaseMessaging.getToken();
             if(AuthMethods.found==true) {
               Map<String, dynamic>usermap = {
                 "email": _email.text,
@@ -47,24 +49,46 @@ FirebaseMessaging firebaseMessaging= FirebaseMessaging.instance;
                   builder: (context) => ChatRoomsScreen()));
             }
             else
+            {
+              showDialog(context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(title: Text('Registered failed :( ',
+                      style: TextStyle(color: Colors.deepPurple),),
+                      content: Text('The username or email isn'+"'"+'t available'),
+                      actions: <Widget>[
+                        FlatButton(child: Text('Ok',
+                          style: TextStyle(
+                              color: Colors.deepPurple),),
+                            onPressed: () {
+                              HapticFeedback.vibrate();
+                              Navigator.of(context).pop();
+                            }),
+                      ],);
+                  });
+              setState(() {isloading=false;});
+            }}),
+              }
+            else
               {
-                showDialog(context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(title: Text('Registered failed :( ',
-                        style: TextStyle(color: Colors.deepPurple),),
-                        content: Text('The username or email isn'+"'"+'t available'),
-                        actions: <Widget>[
-                          FlatButton(child: Text('Ok',
-                            style: TextStyle(
-                                color: Colors.deepPurple),),
-                              onPressed: () {
-                                HapticFeedback.vibrate();
-                                Navigator.of(context).pop();
-                              }),
-                        ],);
-                    });
-                setState(() {isloading=false;});
-              }});
+              showDialog(context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(title: Text('Registered failed :( ',
+                  style: TextStyle(color: Colors.deepPurple),),
+                  content: Text('The username isn'+"'"+'t available'),
+                  actions: <Widget>[
+                    FlatButton(child: Text('Ok',
+                      style: TextStyle(
+                          color: Colors.deepPurple),),
+                        onPressed: () {
+                          HapticFeedback.vibrate();
+                          Navigator.of(context).pop();
+                        }),
+                  ],);
+              }),
+          setState(() {isloading=false;})
+    }
+          });
+
       }
   }
   @override
@@ -72,7 +96,7 @@ FirebaseMessaging firebaseMessaging= FirebaseMessaging.instance;
     double scheight = MediaQuery.of(context).size.height;
     double scwidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
       body:isloading?Container(child:Center(child: CircularProgressIndicator()) ,): Center(
         child:   Column(children: [
             Container(
@@ -97,7 +121,7 @@ FirebaseMessaging firebaseMessaging= FirebaseMessaging.instance;
                           child: Text(
                             "SignUp",
                             style: TextStyle(
-                                color: Colors.deepPurpleAccent,
+                                color: Colors.white,
                                 fontSize: scwidth * 0.2),
                           ),
                         ),
@@ -153,26 +177,26 @@ FirebaseMessaging firebaseMessaging= FirebaseMessaging.instance;
                     decoration:textfield("Password")))),
               ],
             ),),
-            SizedBox(height: scheight*0.02,),
+            SizedBox(height: scheight*0.05,),
               GestureDetector(onTap: (){
                 signMeUp();
               },
                 child: Container(width: scwidth * 0.4,
                   decoration: BoxDecoration(color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(22)),
+                      borderRadius: BorderRadius.circular(15)),
                   child: Padding(
                     padding:  EdgeInsets.all(scwidth*0.02),
                     child: Center(child: Text('SignUp',style: TextStyle(color: Colors.white,fontSize:22 ),)),
                   ),
                 ),
               ),
-            SizedBox(height:scheight*0.01,),
+            SizedBox(height:scheight*0.015,),
             GestureDetector(onTap: (){
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login()));
             },
               child: Row(mainAxisAlignment: MainAxisAlignment.center,children: [
                 Text("Already have account? ",style: mediumTextStyle(),),
-                Text("SignIn Now",style: TextStyle(color: Colors.black,fontSize:16,decoration:TextDecoration.underline ),),
+                Text("SignIn Now",style: TextStyle(color: Colors.white60,fontSize:16,decoration:TextDecoration.underline ),),
               ],),
             )
           ],),),
